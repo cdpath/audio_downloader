@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Dictionary Audio Downloader - Options</title>
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body>
+    <div id="app">
+      <h2>Settings</h2>
+      
+      <div class="setting">
+        <label for="storagePath">Storage Path</label>
+        <input type="text" id="storagePath" placeholder="audios" />
+        <p class="hint">Path relative to Downloads folder (e.g., <code>audios</code> → <code>~/Downloads/audios/</code>)</p>
+        <p class="hint">Tip: To save to Anki, create a symlink:<br/>
+          <code>ln -s "~/Library/.../collection.media" ~/Downloads/anki</code><br/>
+          then use <code>anki</code> as the path here.</p>
+      </div>
+
+      <div class="setting">
+        <label>
+          <input type="checkbox" id="useParentDir" />
+          Use parent directory (e.g., word/word_1.mp3)
+        </label>
+        <p class="hint">If unchecked, saves as word_1.mp3 directly in storage path</p>
+      </div>
+
+      <button id="save">Save Settings</button>
+      <div id="status"></div>
+    </div>
+    <script type="module" src="main.ts"></script>
+  </body>
+</html>

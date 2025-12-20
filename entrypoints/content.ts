@@ -51,18 +51,22 @@ export default defineContentScript({
         btn.style.display = 'inline-block';
         btn.style.verticalAlign = 'middle';
 
+        // Track button index for this word
+        const allButtons = document.querySelectorAll('.vocab-audio-downloader-btn');
+        const buttonIndex = allButtons.length;
+
         btn.onclick = (e) => {
           e.preventDefault();
           e.stopPropagation();
           
           const word = getWord();
-          const timestamp = new Date().getTime().toString().slice(-4);
-          const filename = `audios/${word}_${idHint.slice(0, 5)}_${timestamp}.${ext}`;
 
           browser.runtime.sendMessage({
             type: 'DOWNLOAD_AUDIO',
             url: url,
-            filename: filename
+            word: word,
+            index: buttonIndex,
+            extension: ext,
           });
         };
 
@@ -93,7 +97,7 @@ export default defineContentScript({
 
     browser.runtime.onMessage.addListener((message, sender, sendResponse) => {
       if (message.type === 'GET_AUDIO_LINKS') {
-        const audioData = [];
+        const audioData: Array<{index: number; extension: string; url: string; word: string}> = [];
         
         // Try to guess the word
         let word = "audio";

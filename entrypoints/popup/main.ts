@@ -28,11 +28,12 @@ document.addEventListener('DOMContentLoaded', async () => {
       const btn = document.createElement('button');
       btn.textContent = 'Download';
       btn.onclick = () => {
-        const filename = `audios/${item.word}_${item.index}.${item.extension}`;
         browser.runtime.sendMessage({
           type: 'DOWNLOAD_AUDIO',
           url: item.url,
-          filename: filename
+          word: item.word,
+          index: item.index,
+          extension: item.extension,
         });
       };
 
@@ -41,8 +42,29 @@ document.addEventListener('DOMContentLoaded', async () => {
       list.appendChild(li);
     });
 
+    // Show Download All button
+    const downloadAllBtn = document.getElementById('download-all')!;
+    downloadAllBtn.style.display = 'block';
+    downloadAllBtn.onclick = () => {
+      response.forEach((item: any) => {
+        browser.runtime.sendMessage({
+          type: 'DOWNLOAD_AUDIO',
+          url: item.url,
+          word: item.word,
+          index: item.index,
+          extension: item.extension,
+        });
+      });
+    };
+
   } catch (err) {
     console.error(err);
     list.innerHTML = '<li>Error scanning page. Is this a dictionary page?</li>';
   }
+
+  // Settings link
+  document.getElementById('settings-link')?.addEventListener('click', (e) => {
+    e.preventDefault();
+    browser.runtime.openOptionsPage();
+  });
 });
